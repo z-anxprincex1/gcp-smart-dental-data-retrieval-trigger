@@ -8,25 +8,18 @@ from google.cloud import storage
 app = Flask(__name__)
 CORS(app)
 
-BUCKET_NAME = "smart-dental-datasets"
-BLOB_NAME = "d_lab_400.csv"
-
-if not BUCKET_NAME or not BLOB_NAME:
-    print("FATAL: Please set the BUCKET_NAME and BLOB_NAME environment variables.")
-
-
 def retrieve_and_process_csv(lab_id):
-    if not BUCKET_NAME or not BLOB_NAME:
-         return None, "Server configuration error: BUCKET_NAME or BLOB_NAME not set.", 500
 
     try:
 
         client = storage.Client()
-        bucket = client.bucket(BUCKET_NAME)
-        blob = bucket.blob(BLOB_NAME)
+        bucket_name = "smart-dental-datasets"
+        bucket = client.get_bucket(bucket_name)
+        blob_name = "d_lab_400.csv"
+        blob = bucket.blob(blob_name)
 
         if not blob.exists():
-            return None, f"File not found in bucket: gs://{BUCKET_NAME}/{BLOB_NAME}", 404
+            return None, f"File not found in bucket: gs://{bucket_name}/{blob_name}", 404
 
         csv_bytes = blob.download_as_bytes()
         csv_string = csv_bytes.decode('utf-8')
@@ -62,16 +55,10 @@ def get_data_from_gcs():
     if data is not None:
 
         return jsonify({
-            "message": f"Successfully retrieved data from gs://{BUCKET_NAME}/{BLOB_NAME}",
             "data": data
         }), status_code
     else:
         return jsonify({"error": error_msg}), status_code
-
-@app.route('/', methods=['GET'])
-def health_check():
-    """Simple health check endpoint."""
-    return jsonify({"status": "ok", "service": "GCS CSV API"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5051)))
