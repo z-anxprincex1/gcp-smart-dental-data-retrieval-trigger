@@ -1,0 +1,23 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/smart-bonus-293007/smart-dental-data-retrieval', '.']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/smart-bonus-293007/smart-dental-data-retrieval']
+  
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+   - 'run'
+   - 'deploy'
+   - 'smart-dental-data-retrieval'
+   - '--image'
+   - 'gcr.io/smart-bonus-293007/smart-dental-data-retrieval'
+   - '--region'
+   - 'us-central1'
+   - '--allow-unauthenticated'
+images:
+- 'gcr.io/smart-bonus-293007/smart-dental-data-retrieval'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,0 +1,4 @@
+flask 
+flask-cors 
+pandas 
+google-cloud-storage
