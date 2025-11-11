@@ -12,7 +12,7 @@ steps:
    - 'deploy'
    - 'smart-dental-lab-data'
    - '--image'
-   - 'gcr.io/smart-bonus-293007/xgboost_coupon_model'
+   - 'gcr.io/smart-bonus-293007/smart-dental-data-retrieval'
    - '--region'
    - 'us-central1'
    - '--allow-unauthenticated'
