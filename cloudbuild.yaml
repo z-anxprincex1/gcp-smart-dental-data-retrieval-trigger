@@ -16,7 +16,6 @@ steps:
    - '--region'
    - 'us-central1'
    - '--allow-unauthenticated'
-
 images:
 - 'gcr.io/smart-bonus-293007/smart-dental-data-retrieval'
 

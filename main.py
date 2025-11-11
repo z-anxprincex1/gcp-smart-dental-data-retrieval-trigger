@@ -1,12 +1,10 @@
 import os
 import io
 from flask import Flask, jsonify, request
-from flask_cors import CORS
 import pandas as pd
 from google.cloud import storage
 
 app = Flask(__name__)
-CORS(app)
 
 def retrieve_and_process_csv(lab_id):
 
@@ -61,4 +59,5 @@ def get_data_from_gcs():
         return jsonify({"error": error_msg}), status_code
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5051)))
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
